@@ -290,8 +290,91 @@ handelDelete (product: any) {
     }
 }
 ```
+[5](pics/5.png)<br>
 
 ## Services
+services are groupe of components to make the communication more easier, since the components are as trees.<br>
+`directive` : are the attributes in the html components like `required` in `<input type="text" required>`, in angular you can customize the directives. => put contraints for data<br>
+`Pipes` : use to format data like `{{dateNaissence | date : 'dd/MM/yyyy'}}`, in angular you can set data formats using pipes. => pour formater le donnes.<br>
+### Create a service
+for services to create a service :
+```bash
+ng g s services/product
+```
+g : generate s : serivce<br>
+```bash
+CREATE src/app/services/product.spec.ts (342 bytes)
+CREATE src/app/services/productservice.ts (120 bytes)
+```
+`services/productservice.ts`
+```ts
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class Product {}
+
+```
+`providedIn: 'root'` it says that the service is available for everyone.<br>
+when we add the products at this service we can access it not only in the products components but also in the other components.<br>
+```ts
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class Product {
+  products = [
+      {id: 1, name: "Computer", price: 2300, selected: true },
+      {id: 2, name: "Printer", price: 1200, selected: false },
+      {id: 3, name: "Smart phone", price: 1300, selected: true }
+  ]
+  constructor(){ }
+
+  getAllProducts () {
+    return this.products;
+  }
+
+  deleteProduct (product: any) {
+      let v = confirm("Are you sure");
+      if(v) {
+        this.products = this.products.filter((p:any) => p.id != product.id);
+      }
+  }
+}
+```
+so in `porvidedIn` you decide who has acces to that service.<br>
+
+### Inject a service
+Now to use the service you should inject it.<br>
+In `products/products.ts`
+
+```ts
+export class Products implements OnInit {
+  products : any;
+  constructor(private productService : ProductService) {
+    this.productService = productService;
+  }
+  ngOnInit(): void {
+    this.getAllProducts();
+  }
+
+  getAllProducts () {
+    this.products = this.productService.getAllProducts();
+  }
+  
+  handelDelete (product: any) {
+    this.productService.deleteProduct(product);
+    this.getAllProducts();
+  }
+}
+```
+you add in the constructor
+
+```time
+time = 01:43:00
+```
 
 
 

@@ -96,59 +96,58 @@ CREATE src/app/home/home.css (0 bytes)
 CREATE src/app/home/home.html (20 bytes)
 ```
 
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
+to work with bootstrap there is two ways the first one is the one that mentioned before 
+```json
+"styles": [
+    "src/styles.css",
+    "node_module/bootstrap/dist/css/bootstrap.min.css"
+]
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+or go to `style.css` next to `index.html` and add
+```css
+@import "bootstrap/dist/css/bootstrap.min.css";
+``` 
+after that we add edit app.html
+```html
+<div class="p-3">
+    <nav>
+        <button class="btn btn-outline-primary">Home</button>
+        <button class="ms-1 btn btn-outline-primary">Products</button>
+    </nav>
+</div>
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+after we add that we need a routing system. and here where the file `app.routes.ts` comes.
+```ts
+export const routes: Routes = [
+    {path : "home", component : Home},
+    {path : "products", component : Products}
+];
 ```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
+`path` is the route.<br>
+`component` is the component that gonna load at that root.<br>
+after you can use the routing by in the html :
+```html
+<nav>
+    <button routerLink="/home" class="btn btn-outline-primary">Home</button>
+    <button routerLink="/products" class="ms-1 btn btn-outline-primary">Products</button>
+</nav>
+<router-outlet></router-outlet>
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+`routerLink` you define on it the routing and also you have to add it `app.ts` in the imports
+```ts
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, RouterLink],
+  templateUrl: './app.html',
+  styleUrl: './app.css',
+  standalone: true
+})
 ```
+`router-outlet` is like the screen where the component gonna be displayed.
+![2](pics/2.png)
+![3](pics/3.png)
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+time :
+```time
+01:01:00
 ```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

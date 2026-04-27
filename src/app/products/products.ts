@@ -5,5 +5,6 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './products.html',
   styleUrl: './products.css',
+  standalone: true
 })
 export class Products {}

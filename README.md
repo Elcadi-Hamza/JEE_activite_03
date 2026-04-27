@@ -74,7 +74,7 @@ where we declare the variables.
 ```html
 <h1>{{email}}</h1>
 ```
-![1](pics/1.png)
+![1](pics/1.png)<br>
 `app.spec.ts`: for tests unitaires.<br>
 by using
 ```bash
@@ -147,7 +147,152 @@ after you can use the routing by in the html :
 ![2](pics/2.png)
 ![3](pics/3.png)
 
-time :
-```time
-01:01:00
+---
+Now we are going to add products to the products component.<br>
+we addd the products in products.ts
+```ts
+export class Products {
+  products = [
+    {id: 1, name: "Computer", price: 2300, selected: true },
+    {id: 2, name: "Printer", price: 1200, selected: true },
+    {id: 3, name: "Smart phone", price: 1300, selected: true }
+  ]
+}
 ```
+
+## Loop :
+
+there is two ways to show the data :<br>
+#### 1 =
+```html
+<tbody>
+<tr *ngFor="let p of products">
+    <td>{{p.id}}</td>
+    <td>{{p.name}}</td>
+    <td>{{p.price}}</td>
+    <td>{{p.selected}}</td>
+  </tr>
+</tbody>
+```
+note you should import `ngFor` in `products.ts`.
+```ts
+import { NgForOf } from '@angular/common';
+@Component({
+  selector: 'app-products',
+  imports: [NgForOf],
+  templateUrl: './products.html',
+  styleUrl: './products.css',
+  standalone: true
+})
+```
+#### 2 =
+```html
+<tbody>
+    @for(p of products; track p) {
+        <tr>
+        <!-- <tr *ngFor="let p of products"> -->
+            <td>{{p.id}}</td>
+            <td>{{p.name}}</td>
+            <td>{{p.price}}</td>
+            <td>{{p.selected}}</td>
+        </tr>
+    }
+</tbody>
+```
+[4](pics/4.png)<br>
+Now we use defferent approches for the products, angular works with the injection of the dependencies
+```ts
+export class Products implements OnInit {
+  products : Array<any>;
+  constructor() {
+
+  }
+  ngOnInit(): void {
+    this.products = [
+      {id: 1, name: "Computer", price: 2300, selected: true },
+      {id: 2, name: "Printer", price: 1200, selected: true },
+      {id: 3, name: "Smart phone", price: 1300, selected: true }
+    ]
+  }
+}
+```
+
+## Condition
+
+the condition in angular there are two
+```html
+ <tbody *ngIf="products">
+    @for(p of products; track p) {
+        <tr>
+        <!-- <tr *ngFor="let p of products"> -->
+            <td>{{p.id}}</td>
+            <td>{{p.name}}</td>
+            <td>{{p.price}}</td>
+            <td>{{p.selected}}</td>
+        </tr>
+    }
+</tbody>
+```
+or 
+```html
+@if (products) {
+    <tbody>
+    <!-- <tbody *ngIf="products"> -->
+        @for(p of products; track p) {
+            <tr>
+            <!-- <tr *ngFor="let p of products"> -->
+                <td>{{p.id}}</td>
+                <td>{{p.name}}</td>
+                <td>{{p.price}}</td>
+                <td>{{p.selected}}</td>
+            </tr>
+        }
+    </tbody>
+}
+```
+Note : you still going to have an error 
+```error
+Property 'products' has no initializer and is not definitely assigned in the constructor. [plugin angular-compiler]
+```
+thats because when you specify the type in our case an array `products : Array<any>;` you always need to intianalize or 
+make it just any, like `products : any` to avoid the error, or add `!` so angular gonna igonre the insialization of the variable
+`products! : Array<any>`<br>
+lets add a icons for the selected products
+```html
+<td>
+  @if(p.selected) {
+      <i class="bi bi-check-circle"></i>
+  } @else {
+      <i class="bi bi-x-circle"></i>
+  }
+</td>
+```
+note : to make classes `bi bi-check-circle bi-x-circle` (bi : bootstrap icon) you should install bootstrap icons `npm install bootstrap-icons`.<br>
+and add it to the `style.css`
+```css
+@import "bootstrap-icons/font/bootstrap-icons.css";
+```
+
+## delete function
+
+`products.html`
+```html
+<td>
+    <button (click)="handelDelete(p)" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+</td>
+```
+`products.ts`
+```ts
+handelDelete (product: any) {
+    let v = confirm("Are you sure");
+    if(v) {
+      this.products = this.products.filter((p:any) => p.id != product.id);
+    }
+}
+```
+
+## Services
+
+
+
+

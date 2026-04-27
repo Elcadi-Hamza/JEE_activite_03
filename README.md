@@ -75,6 +75,26 @@ where we declare the variables.
 <h1>{{email}}</h1>
 ```
 ![1](pics/1.png)
+`app.spec.ts`: for tests unitaires.<br>
+by using
+```bash
+ng test
+```
+# Craetion of a web component
+run : 
+```bash
+ng g c home
+```
+`g` : generate<br>
+`c` : component<br>
+`home` : name of the component.<br>
+it gonna create home folder on app folder that has
+```bash
+CREATE src/app/home/home.spec.ts (540 bytes)
+CREATE src/app/home/home.ts (189 bytes)
+CREATE src/app/home/home.css (0 bytes)
+CREATE src/app/home/home.html (20 bytes)
+```
 
 
 ## Development server

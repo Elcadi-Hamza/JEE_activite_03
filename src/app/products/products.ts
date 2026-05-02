@@ -27,11 +27,34 @@ export class Products implements OnInit {
   }
 
   getAllProducts () {
-    this.products = this.productService.getAllProducts();
+    //localy
+    // this.products = this.productService.getAllProducts();
+
+    //from backend
+    this.productService.getAllProducts().subscribe({
+      next : resp => {
+        this.products = resp;
+      },
+      error : err => {
+        console.log("error: " + err);
+      }
+    });
+
   }
   
   handelDelete (product: any) {
-    this.productService.deleteProduct(product);
-    this.getAllProducts();
+    //localy
+    // this.productService.deleteProduct(product);
+    // this.getAllProducts();
+
+    //from backend
+    this.productService.deleteProduct(product).subscribe({
+      next: resp => {
+        this.getAllProducts();
+      },
+      error : err => {
+        console.log("error : " + err);
+      }
+    })
   }
 }

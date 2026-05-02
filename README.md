@@ -370,11 +370,82 @@ export class Products implements OnInit {
   }
 }
 ```
-you add in the constructor
-
-```time
-time = 01:43:00
+## Using a backend
+We are going to use the backend from last TP.
+```folder
+./backend
 ```
+to link the backend with the frontend you go to `app.config.ts` addnig `provideHttpClient()`:
+```ts
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(routes), provideHttpClient()
+  ]
+};
+```
+and update `productService.ts` to use the backend : 
+```ts
+export class ProductService {
+
+  constructor(private http : HttpClient){ }
+
+  getAllProducts (){
+    return this.http.get("http://localhost:8083/products");
+  }
+
+  deleteProduct (product: any) {
+      let v = confirm("Are you sure");
+      if(v) {
+        return this.http.delete("http://localhost:8083/products/" + product.id)
+      }
+  }
+}
+```
+and also `product.ts` :
+
+```ts
+export class Products implements OnInit {
+  products : any;
+  constructor(private productService : ProductService) {
+    this.productService = productService;
+  }
+  ngOnInit(): void {
+    this.getAllProducts();
+  }
+
+  getAllProducts () {
+    this.productService.getAllProducts().subscribe({
+      next : resp => {
+        this.products = resp;
+      },
+      error : err => {
+        console.log("error: " + err);
+      }
+    });
+
+  }
+  
+  handelDelete (product: any) {
+    let v = confirm("are you sure !!!");
+    if (v == true) {
+      this.productService.deleteProduct(product).subscribe({
+        next: resp => {
+          this.getAllProducts();
+        },
+        error : err => {
+          console.log("error : " + err);
+        }
+      })
+    }
+  }
+}
+```
+Note : you should add cross origine to the backend so it allows communication between it and the frontend
+```java
+@CrossOrigin("*")
+```
+---
 
 
 
